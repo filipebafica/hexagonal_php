@@ -1,8 +1,18 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Core\Modules\DocumentUploader;
+
+use Core\Modules\DocumentUploader\Rules\XMLDecoderRule;
+use Core\Modules\DocumentUploader\Rules\AccessKeyRecoveryRule;
+use Core\Modules\DocumentUploader\Rules\CNPJValidationRule;
+use Core\Modules\DocumentUploader\Rules\UFValidationRule;
+use Core\Modules\DocumentUploader\Rules\XMLIngestorDispatchRule;
+use Core\Modules\DocumentUploader\Rules\DocumentSaveRule;
+use Core\Modules\DocumentUploader\Entities\Document;
+use Core\Modules\DocumentUploader\Entities\DocumentError;
+use Core\Modules\DocumentUploader\Requests\Request;
+use Core\Modules\DocumentUploader\Responses\Response;
 
 final class UseCase {
     private XMLDecoderRule $xmlDecoderRule;
@@ -31,9 +41,9 @@ final class UseCase {
             $this->cnpjValidationRule->apply($request, $accessKey);
             $this->ufValidationRule->apply($request, $accessKey);
             $this->xmlIngestorDispatchRule->apply($xml);
-            $statusCode = $this->documentSaveRule->apply($xml);
+            $statusCode = $this->documentSaveRule->apply(new Document($xml));
         } catch (Exception $e) {
-            $statusCode = $this->documentErrorSaveRule->apply($xml, $e->getMessage());
+            $statusCode = $this->documentErrorSaveRule->apply(new DocumentError($xml, $e->getMessage()));
         }
 
         $response = new Response(
