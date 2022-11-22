@@ -4,7 +4,7 @@ FROM php:8.1-fpm
 ARG user
 ARG uid
 
-RUN apt-get update && apt-get install -y bash sudo
+RUN apt-get update && apt-get install -y bash sudo libpng-dev libonig-dev libxml2-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

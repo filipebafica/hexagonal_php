@@ -18,3 +18,4 @@ clean:
 
 permission:
 	sudo chmod -R 777 app/storage/
+	sudo chmod -R 777 app/.phpunit.result.cache
