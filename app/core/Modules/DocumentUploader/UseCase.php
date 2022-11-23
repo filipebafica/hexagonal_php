@@ -15,7 +15,7 @@ use Core\Modules\DocumentUploader\Entities\DocumentError;
 use Core\Modules\DocumentUploader\Requests\Request;
 use Core\Modules\DocumentUploader\Responses\Response;
 
-final class UseCase 
+final class UseCase
 {
     private XMLDecoderRule $xmlDecoderRule;
     private AccessKeyRecoveryRule $accessKeyRecoveryRule;
@@ -25,8 +25,8 @@ final class UseCase
     private DocumentRegistrySaveRule $documentRegistrySaveRule;
     private DocumentErrorRegistrySaveRule $documentErrorRegistrySaveRule;
 
-    public function __construct(
-    ) {
+    public function __construct()
+    {
         $this->xmlDecoderRule = new XMLDecoderRule();
         $this->accessKeyRecoveryRule = new AccessKeyRecoveryRule();
         $this->cnpjValidationRule = new CNPJValidationRule();
@@ -36,7 +36,8 @@ final class UseCase
         $this->documentErrorRegistrySaveRule = new DocumentErrorRegistrySaveRule();
     }
 
-    public function execute(Request $request) : Response {
+    public function execute(Request $request) : Response
+    {
         try {
             $xml = $this->xmlDecoderRule->apply($request);
             $accessKey = $this->accessKeyRecoveryRule->apply($xml);
