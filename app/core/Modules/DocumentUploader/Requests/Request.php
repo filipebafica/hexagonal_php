@@ -12,7 +12,7 @@ class Request
     public function __construct(string $body) {
         $this->body = new Body($body);
     }
-    
+
     public function getBody() : Body {
         return $this->body;
     }

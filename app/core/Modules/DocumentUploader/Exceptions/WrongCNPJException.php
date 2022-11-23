@@ -2,7 +2,7 @@
 
 namespace Core\Modules\DocumentUploader\Exceptions;
 
-class WrongUfException extends \Exception
+class WrongCNPJException extends \Exception
 {
 }
 ?>

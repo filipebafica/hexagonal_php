@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Core\Modules\DocumentUploader\Rules;
 use Core\Modules\DocumentUploader\Requests\Request;
-use Core\Modules\DocumentUploader\Exceptions\WrongUfException;
+use Core\Modules\DocumentUploader\Exceptions\WrongUFException;
 
 class UFValidationRule
 {
@@ -24,7 +24,7 @@ class UFValidationRule
         $accessKeyUF = substr($accessKey, 0, 2);
 
         if ($bodyUF != $accessKeyUF) {
-            throw new WrongUfException("UF informada não corresponde à UF da chave de acesso do XML");
+            throw new WrongUFException("UF informada não corresponde à UF da chave de acesso do XML");
         }
     }
 }

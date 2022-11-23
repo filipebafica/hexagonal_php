@@ -4,10 +4,10 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Core\Modules\DocumentUploader\Requests\Request;
-use Core\Modules\DocumentUploader\Rules\UFValidationRule;
-use Core\Modules\DocumentUploader\Exceptions\WrongUFException;
+use Core\Modules\DocumentUploader\Rules\CNPJValidationRule;
+use Core\Modules\DocumentUploader\Exceptions\WrongCNPJException;
 
-class UFValidationRuleTest extends TestCase
+class CNPJValidationRuleTest extends TestCase
 {
     public function testSuccess() : void {
         $this->expectNotToPerformAssertions();
@@ -21,13 +21,13 @@ class UFValidationRuleTest extends TestCase
         $accessKey = "35221191413282000104550050003188381041451266";
 
         $request = new Request($body);
-        $ufValidationRule = new UFValidationRule();
+        $cnpjValidationRule = new CNPJValidationRule();
 
-        $ufValidationRule->apply($request, $accessKey);
+        $cnpjValidationRule->apply($request, $accessKey);
     }
 
     public function testFailure() : void {
-        $this->expectException(WrongUFException::class);
+        $this->expectException(WrongCNPJException::class);
 
         $body = json_encode(array(
             "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
@@ -35,12 +35,12 @@ class UFValidationRuleTest extends TestCase
             "uf" => "SP",
             "type" => "nfe"
         ));
-        $accessKey = "00221191413282000104550050003188381041451266";
+        $accessKey = "35221100000000000000550050003188381041451266";
 
         $request = new Request($body);
-        $ufValidationRule = new UFValidationRule();
+        $cnpjValidationRule = new CNPJValidationRule();
 
-        $ufValidationRule->apply($request, $accessKey);
+        $cnpjValidationRule->apply($request, $accessKey);
     }
 }
 ?>
