@@ -10,7 +10,7 @@ class XMLDecoderRuleTest extends TestCase
 {
     public function testSuccess() {
         $body = json_encode(array(
-            "xml" => "aGVsbG8gd29ybGQ=",
+            "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
             "uf" => "SP",
             "type" => "nfe"
@@ -24,7 +24,7 @@ class XMLDecoderRuleTest extends TestCase
 
     public function testFailure() {
         $body = json_encode(array(
-            "xml" => "@@@aGVsbG8gd29ybGQ=",
+            "xml" => "@@@MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
             "uf" => "SP",
             "type" => "nfe"
