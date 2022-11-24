@@ -19,12 +19,12 @@ class UFValidationRule
         'MT' => '51', 'GO' => '52', 'DF' => '53'
     );
 
-    public function apply(Request $request, string $accessKey) {
+    public function apply(Request $request, string $accessKey) : void {
         $bodyUF = $this->ufTable[$request->getBody()->getUF()];
         $accessKeyUF = substr($accessKey, 0, 2);
 
         if ($bodyUF != $accessKeyUF) {
-            throw new WrongUFException("UF informada não corresponde à UF da chave de acesso do XML");
+            throw new WrongUFException();
         }
     }
 }

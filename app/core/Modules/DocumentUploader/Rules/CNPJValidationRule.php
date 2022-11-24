@@ -7,12 +7,12 @@ use Core\Modules\DocumentUploader\Exceptions\WrongCNPJException;
 
 class CNPJValidationRule
 {
-    public function apply(Request $request, string $accessKey) {
+    public function apply(Request $request, string $accessKey) : void {
         $bodyCNPJ = $request->getBody()->getCNPJ();
         $accessKeyCNPJ = substr($accessKey, 6, 14);
 
         if ($bodyCNPJ != $accessKeyCNPJ) {
-            throw new WrongCNPJException("CNPJ informado não corresponde ao CNPJ da chave de acesso do XML");
+            throw new WrongCNPJException();
         }
     }
 }

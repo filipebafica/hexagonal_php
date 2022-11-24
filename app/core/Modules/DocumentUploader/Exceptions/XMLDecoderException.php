@@ -2,11 +2,11 @@
 
 namespace Core\Modules\DocumentUploader\Exceptions;
 
-class MissingBodyFieldException extends \Exception
+class XMLDecoderException extends \Exception
 {
     public function __construct()
     {
-        $this->message = "Um ou mais campos do body estão faltando";
+        $this->message = "Ocorreu algum problema ao decodificar o XML passado";
         $this->code = 400;
     }
 }

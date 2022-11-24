@@ -30,7 +30,7 @@ class CNPJValidationRuleTest extends TestCase
         $this->expectException(WrongCNPJException::class);
 
         $body = json_encode(array(
-            "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
+            "xml" => "MzUyMjExMDAwMDAwMDAwMDAwMDA1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
             "uf" => "SP",
             "type" => "nfe"

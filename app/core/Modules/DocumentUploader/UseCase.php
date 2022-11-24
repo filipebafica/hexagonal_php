@@ -44,7 +44,7 @@ final class UseCase
             $this->cnpjValidationRule->apply($request, $accessKey);
             $this->ufValidationRule->apply($request, $accessKey);
             $this->xmlIngestorDispatchRule->apply($xml);
-            $statusCode = $this->documentRegistrySaveRule->apply(new Document($xml));
+            $statusCode = $this->documentRegistrySaveRule->apply(new Document($request, $accessKey));
         } catch (Exception $e) {
             $statusCode = $this->documentErrorRegistrySaveRule->apply(new DocumentError($xml, $e->getMessage()));
         }

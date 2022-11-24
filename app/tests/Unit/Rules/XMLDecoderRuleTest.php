@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Core\Modules\DocumentUploader\Requests\Request;
 use Core\Modules\DocumentUploader\Rules\XMLDecoderRule;
+use Core\Modules\DocumentUploader\Exceptions\XMLDecoderException;
 
 class XMLDecoderRuleTest extends TestCase
 {
@@ -23,6 +24,7 @@ class XMLDecoderRuleTest extends TestCase
     }
 
     public function testFailure() {
+        $this->expectException(XMLDecoderException::class);
         $body = json_encode(array(
             "xml" => "@@@MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
@@ -33,7 +35,7 @@ class XMLDecoderRuleTest extends TestCase
         $request = new Request($body);
         $xmlDecoderRule = new XMLDecoderRule();
 
-        $this->assertFalse($xmlDecoderRule->apply($request));
+        $xmlDecoderRule->apply($request);
     }
 }
 ?>

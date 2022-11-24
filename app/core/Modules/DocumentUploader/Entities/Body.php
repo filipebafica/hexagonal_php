@@ -20,7 +20,7 @@ class Body
             $bodyObj->uf,
             $bodyObj->type
         )) {
-            throw new MissingBodyFieldException("Um ou mais campos do body estão faltando");
+            throw new MissingBodyFieldException();
         }
         $this->xml = $bodyObj->xml;
         $this->cnpj = $bodyObj->cnpj;
