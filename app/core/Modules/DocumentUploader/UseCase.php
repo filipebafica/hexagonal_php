@@ -28,6 +28,7 @@ final class UseCase
     private DocumentErrorRegistrySaveRule $documentErrorRegistrySaveRule;
     private DocumentSaveGateway $documentSaveGateway;
     private DocumentErrorSaveGateway $documentErrorSaveGateway;
+    private string $statusCode;
 
     public function __construct(
         DocumentSaveGateway $documentSaveGateway,
@@ -43,7 +44,6 @@ final class UseCase
         $this->xmlIngestorDispatchRule = new XMLIngestorDispatchRule();
         $this->documentRegistrySaveRule = new DocumentRegistrySaveRule();
         $this->documentErrorRegistrySaveRule = new DocumentErrorRegistrySaveRule();
-
     }
 
     public function execute(Request $request) : Response
@@ -59,8 +59,9 @@ final class UseCase
                 $accessKey,
                 "success"
             ));
-            $statusCode = 204;
+            $this->statusCode = 204;
         } catch (Exception $e) {
+            $this->statusCode = $e->getCode();
             $document = new Document(
                 $request->getBody(),
                 $accessKey,
@@ -72,14 +73,13 @@ final class UseCase
                 $e->getMessage(),
                 $e->getTraceAsString()
             ));
-            $statusCode = $e->getCode();
         }
 
         $response = new Response(
-            statusCode: $statusCode
+            statusCode: $this->statusCode
         );
 
-        return ($response);
+        return $response;
     }
 }
 ?>
