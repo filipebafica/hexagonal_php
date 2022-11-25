@@ -54,32 +54,28 @@ final class UseCase
             $this->cnpjValidationRule->apply($request->getBody()->getCNPJ(), $accessKey);
             $this->ufValidationRule->apply($request->getBody()->getUF(), $accessKey);
             $this->xmlIngestorDispatchRule->apply($xml);
-            $this->documentRegistrySaveRule->apply(new Document(
+            $this->documentRegistrySaveRule->apply($this->documentSaveGateway, new Document(
                 $request->getBody(),
                 $accessKey,
                 "success"
             ));
-            $this->statusCode = 204;
-        } catch (Exception $e) {
+            $this->statusCode = "204";
+        } catch (\Exception $e) {
             $this->statusCode = $e->getCode();
             $document = new Document(
                 $request->getBody(),
                 $accessKey,
                 "error"
             );
-            $this->documentRegistrySaveRule->apply($documentSaveGateway, $document);
-            $this->documentErrorRegistrySaveRule->apply($documentErrorSaveGateway, new DocumentError(
+            $this->documentRegistrySaveRule->apply($this->documentSaveGateway, $document);
+            $this->documentErrorRegistrySaveRule->apply($this->documentErrorSaveGateway, new DocumentError(
                 $document->getID(),
                 $e->getMessage(),
                 $e->getTraceAsString()
             ));
         }
 
-        $response = new Response(
-            statusCode: $this->statusCode
-        );
-
-        return $response;
+        return new Response($this->statusCode);
     }
 }
 ?>

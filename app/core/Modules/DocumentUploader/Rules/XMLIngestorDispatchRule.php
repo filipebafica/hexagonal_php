@@ -2,7 +2,8 @@
 declare(strict_types=1);
 
 namespace Core\Modules\DocumentUploader\Rules;
-namespace Core\Modules\DocumentUploader\Exceptions\IngestionException;
+
+use Core\Modules\DocumentUploader\Exceptions\IngestionException;
 
 class XMLIngestorDispatchRule
 {

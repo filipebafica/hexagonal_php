@@ -7,18 +7,18 @@ use Core\Modules\DocumentUploader\Entities\Body;
 
 class Document
 {
-    private $id;
-    private $cnpj;
-    private $uf;
-    private $type;
-    private $access_key;
-    private $status;
-    private $created_at;
-    private $updated_at;
+    private string $id;
+    private string $cnpj;
+    private string $uf;
+    private string $type;
+    private string $access_key;
+    private string $status;
+    private string $created_at;
+    private string $updated_at;
 
     public function __construct(Body $body, string $accessKey, string $status)
     {
-        $this->id = 0;
+        $this->id = "0";
         $this->cnpj = $body->getCNPJ();
         $this->uf = $body->getUF();
         $this->type = $body->getType();
@@ -28,15 +28,15 @@ class Document
         $this->updated_at = "n/a";
     }
 
-    public function getID() : string{
+    public function getID() : string {
         return $this->id;
     }
 
-    public function getCNPJ() : string{
+    public function getCNPJ() : string {
         return $this->cnpj;
     }
 
-    public function getuf() : string{
+    public function getuf() : string {
         return $this->uf;
     }
 
@@ -44,19 +44,19 @@ class Document
         return $this->type;
     }
 
-    public function getAccessKey() : string{
+    public function getAccessKey() : string {
         return $this->access_key;
     }
 
-    public function getStatus() : string{
+    public function getStatus() : string {
         return $this->status;
     }
 
-    public function getCreatedAt() : string{
+    public function getCreatedAt() : string {
         return $this->created_at;
     }
 
-    public function getUpdatedAt() : string{
+    public function getUpdatedAt() : string {
         return $this->updated_at;
     }
 }

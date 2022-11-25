@@ -8,19 +8,12 @@ use Core\Modules\DocumentUploader\Entities\DocumentError;
 
 class DocumentErrorRegistrySaveRule
 {
-    private DocumentErrorSaveGateway $documentErrorSaveGateway;
-    private DocumentError $documentError;
-
-    public function __construct(
+    public function apply(
         DocumentErrorSaveGateway $documentErrorSaveGateway,
         DocumentError $documentError
-    ) {
-        $this->documentErrorSaveGateway = $documentErrorSaveGateway;
-        $this->documentError = $documentError;
-    }
-
-    public function apply() : void {
-        $this->documentErrorSaveGateway->save($this->documentError);
+    ) : void
+    {
+        $documentErrorSaveGateway->save($documentError);
     }
 }
 

@@ -6,7 +6,7 @@ namespace Core\Modules\DocumentUploader\Adapters;
 use Core\Modules\DocumentUploader\Gateways\DocumentSaveGateway;
 use Core\Modules\DocumentUploader\Entities\Document;
 
-class DocumentSaveAdapter extends DocumentSaveGateway
+class DocumentSaveAdapter implements DocumentSaveGateway
 {
     public function save(Document $document) : void {}
 }

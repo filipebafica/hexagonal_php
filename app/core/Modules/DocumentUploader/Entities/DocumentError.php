@@ -5,10 +5,10 @@ namespace Core\Modules\DocumentUploader\Entities;
 
 class DocumentError
 {
-    private $document_id;
-    private $description;
-    private $trace;
-    private $created_at;
+    private string $document_id;
+    private string $description;
+    private string $trace;
+    private string $created_at;
 
     public function __construct(
         string $document_id,
@@ -22,15 +22,15 @@ class DocumentError
         $this->created_at = date('m/d/Y h:i:s a');
     }
 
-    public function getDocumentID() : string{
+    public function getDocumentID() : string {
         return $this->document_id;
     }
 
-    public function getDescription() : string{
+    public function getDescription() : string {
         return $this->description;
     }
 
-    public function getTrace() : string{
+    public function getTrace() : string {
         return $this->trace;
     }
 

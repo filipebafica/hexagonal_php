@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\DocumentUploader\Rules;
 
 use PHPUnit\Framework\TestCase;
 use Core\Modules\DocumentUploader\Requests\Request;
