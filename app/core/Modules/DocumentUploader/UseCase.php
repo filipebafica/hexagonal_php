@@ -12,6 +12,8 @@ use Core\Modules\DocumentUploader\Rules\DocumentRegistrySaveRule;
 use Core\Modules\DocumentUploader\Rules\DocumentErrorRegistrySaveRule;
 use Core\Modules\DocumentUploader\Entities\Document;
 use Core\Modules\DocumentUploader\Entities\DocumentError;
+use Core\Modules\DocumentUploader\Gateways\DocumentSaveGateway;
+use Core\Modules\DocumentUploader\Gateways\DocumentErrorSaveGateway;
 use Core\Modules\DocumentUploader\Requests\Request;
 use Core\Modules\DocumentUploader\Responses\Response;
 
@@ -24,9 +26,16 @@ final class UseCase
     private XMLIngestorDispatchRule $xmlIngestorDispatchRule;
     private DocumentRegistrySaveRule $documentRegistrySaveRule;
     private DocumentErrorRegistrySaveRule $documentErrorRegistrySaveRule;
+    private DocumentSaveGateway $documentSaveGateway;
+    private DocumentErrorSaveGateway $documentErrorSaveGateway;
 
-    public function __construct()
-    {
+    public function __construct(
+        DocumentSaveGateway $documentSaveGateway,
+        DocumentErrorSaveGateway $documentErrorSaveGateway
+
+    ){
+        $this->documentSaveGateway = $documentSaveGateway;
+        $this->documentErrorSaveGateway = $documentErrorSaveGateway;
         $this->xmlDecoderRule = new XMLDecoderRule();
         $this->accessKeyRecoveryRule = new AccessKeyRecoveryRule();
         $this->cnpjValidationRule = new CNPJValidationRule();
@@ -34,19 +43,36 @@ final class UseCase
         $this->xmlIngestorDispatchRule = new XMLIngestorDispatchRule();
         $this->documentRegistrySaveRule = new DocumentRegistrySaveRule();
         $this->documentErrorRegistrySaveRule = new DocumentErrorRegistrySaveRule();
+
     }
 
     public function execute(Request $request) : Response
     {
         try {
-            $xml = $this->xmlDecoderRule->apply($request);
+            $xml = $this->xmlDecoderRule->apply($request->getBody()->getXML());
             $accessKey = $this->accessKeyRecoveryRule->apply($xml);
-            $this->cnpjValidationRule->apply($request, $accessKey);
-            $this->ufValidationRule->apply($request, $accessKey);
+            $this->cnpjValidationRule->apply($request->getBody()->getCNPJ(), $accessKey);
+            $this->ufValidationRule->apply($request->getBody()->getUF(), $accessKey);
             $this->xmlIngestorDispatchRule->apply($xml);
-            $statusCode = $this->documentRegistrySaveRule->apply(new Document($request, $accessKey));
+            $this->documentRegistrySaveRule->apply(new Document(
+                $request->getBody(),
+                $accessKey,
+                "success"
+            ));
+            $statusCode = 204;
         } catch (Exception $e) {
-            $statusCode = $this->documentErrorRegistrySaveRule->apply(new DocumentError($xml, $e->getMessage()));
+            $document = new Document(
+                $request->getBody(),
+                $accessKey,
+                "error"
+            );
+            $this->documentRegistrySaveRule->apply($documentSaveGateway, $document);
+            $this->documentErrorRegistrySaveRule->apply($documentErrorSaveGateway, new DocumentError(
+                $document->getID(),
+                $e->getMessage(),
+                $e->getTraceAsString()
+            ));
+            $statusCode = $e->getCode();
         }
 
         $response = new Response(

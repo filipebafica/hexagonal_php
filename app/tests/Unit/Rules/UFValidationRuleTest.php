@@ -11,36 +11,18 @@ class UFValidationRuleTest extends TestCase
 {
     public function testSuccess() : void {
         $this->expectNotToPerformAssertions();
-
-        $body = json_encode(array(
-            "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
-            "cnpj" => "91413282000104",
-            "uf" => "SP",
-            "type" => "nfe"
-        ));
-        $accessKey = "35221191413282000104550050003188381041451266";
-
-        $request = new Request($body);
+        $bodyUF = "SP";
+        $extractedAccessKey = "35221191413282000104550050003188381041451266";
         $ufValidationRule = new UFValidationRule();
-
-        $ufValidationRule->apply($request, $accessKey);
+        $ufValidationRule->apply($bodyUF, $extractedAccessKey);
     }
 
     public function testFailure() : void {
         $this->expectException(WrongUFException::class);
-
-        $body = json_encode(array(
-            "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
-            "cnpj" => "91413282000104",
-            "uf" => "SP",
-            "type" => "nfe"
-        ));
-        $accessKey = "00221191413282000104550050003188381041451266";
-
-        $request = new Request($body);
+        $bodyUF = "SP";
+        $extractedAccessKey = "00221191413282000104550050003188381041451266";
         $ufValidationRule = new UFValidationRule();
-
-        $ufValidationRule->apply($request, $accessKey);
+        $ufValidationRule->apply($bodyUF, $extractedAccessKey);
     }
 }
 ?>

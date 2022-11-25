@@ -8,9 +8,9 @@ use Core\Modules\DocumentUploader\Exceptions\XMLDecoderException;
 
 class XMLDecoderRule
 {
-    public function apply(Request $request) : string|bool {
+    public function apply(string $xml) : string|bool {
         $xml = base64_decode(
-            $request->getBody()->getXML(),
+            $xml,
             true
         );
 

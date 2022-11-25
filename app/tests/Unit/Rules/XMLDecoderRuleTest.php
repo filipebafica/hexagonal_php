@@ -10,32 +10,16 @@ use Core\Modules\DocumentUploader\Exceptions\XMLDecoderException;
 class XMLDecoderRuleTest extends TestCase
 {
     public function testSuccess() {
-        $body = json_encode(array(
-            "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
-            "cnpj" => "91413282000104",
-            "uf" => "SP",
-            "type" => "nfe"
-        ));
-
-        $request = new Request($body);
+        $bodyXML = "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=";
         $xmlDecoderRule = new XMLDecoderRule();
-
-        $this->assertNotFalse($xmlDecoderRule->apply($request));
+        $this->assertNotFalse($xmlDecoderRule->apply($bodyXML));
     }
 
     public function testFailure() {
         $this->expectException(XMLDecoderException::class);
-        $body = json_encode(array(
-            "xml" => "@@@MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
-            "cnpj" => "91413282000104",
-            "uf" => "SP",
-            "type" => "nfe"
-        ));
-
-        $request = new Request($body);
+        $bodyXML = "@@@MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=";
         $xmlDecoderRule = new XMLDecoderRule();
-
-        $xmlDecoderRule->apply($request);
+        $xmlDecoderRule->apply($bodyXML);
     }
 }
 ?>
