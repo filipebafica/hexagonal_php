@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Core\Modules\DocumentUploader\Entities;
 
-use Core\Modules\DocumentUploader\Entities\Body;
+use Core\Modules\DocumentUploader\Entities\DFe;
 
 class Document
 {
@@ -16,12 +16,12 @@ class Document
     private string $created_at;
     private string $updated_at;
 
-    public function __construct(Body $body, string $accessKey, string $status)
+    public function __construct(DFe $dfe, string $accessKey, string $status)
     {
         $this->id = "0";
-        $this->cnpj = $body->getCNPJ();
-        $this->uf = $body->getUF();
-        $this->type = $body->getType();
+        $this->cnpj = $dfe->getCNPJ();
+        $this->uf = $dfe->getUF();
+        $this->type = $dfe->getType();
         $this->accessKey = $accessKey;
         $this->status = $status;
         $this->created_at = date('m/d/Y h:i:s a');

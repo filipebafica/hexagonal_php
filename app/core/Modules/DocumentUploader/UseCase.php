@@ -28,7 +28,6 @@ final class UseCase
     private DocumentErrorRegistrySaveRule $documentErrorRegistrySaveRule;
     private DocumentSaveGateway $documentSaveGateway;
     private DocumentErrorSaveGateway $documentErrorSaveGateway;
-    private string $statusCode;
 
     public function __construct(
         DocumentSaveGateway $documentSaveGateway,
@@ -46,36 +45,35 @@ final class UseCase
         $this->documentErrorRegistrySaveRule = new DocumentErrorRegistrySaveRule();
     }
 
-    public function execute(Request $request) : Response
+    public function execute(Request $request) : void
     {
         try {
-            $xml = $this->xmlDecoderRule->apply($request->getBody()->getXML());
+            $xml = $this->xmlDecoderRule->apply($request->getDFe()->getXML());
             $accessKey = $this->accessKeyRecoveryRule->apply($xml);
-            $this->cnpjValidationRule->apply($request->getBody()->getCNPJ(), $accessKey);
-            $this->ufValidationRule->apply($request->getBody()->getUF(), $accessKey);
+            $this->cnpjValidationRule->apply($request->getDFe()->getCNPJ(), $accessKey);
+            $this->ufValidationRule->apply($request->getDFe()->getUF(), $accessKey);
             $this->xmlIngestorDispatchRule->apply($xml);
             $this->documentRegistrySaveRule->apply($this->documentSaveGateway, new Document(
-                $request->getBody(),
+                $request->getDFe(),
                 $accessKey,
                 "success"
             ));
-            $this->statusCode = "204";
         } catch (\Exception $e) {
-            $this->statusCode = $e->getCode();
             $document = new Document(
-                $request->getBody(),
+                $request->getDFe(),
                 $accessKey,
                 "error"
             );
+
             $this->documentRegistrySaveRule->apply($this->documentSaveGateway, $document);
             $this->documentErrorRegistrySaveRule->apply($this->documentErrorSaveGateway, new DocumentError(
                 $document->getID(),
                 $e->getMessage(),
                 $e->getTraceAsString()
             ));
-        }
 
-        return new Response($this->statusCode);
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 }
 ?>

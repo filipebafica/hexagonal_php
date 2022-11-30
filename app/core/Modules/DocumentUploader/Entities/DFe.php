@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Core\Modules\DocumentUploader\Entities;
 
-use Core\Modules\DocumentUploader\Exceptions\MissingBodyFieldException;
+use Core\Modules\DocumentUploader\Exceptions\MissingFieldException;
 
-class Body
+class DFe
 {
     private $xml;
     private $cnpj;
@@ -14,14 +14,6 @@ class Body
 
     public function __construct(string $body) {
         $bodyObj = json_decode($body);
-        if (!isset(
-            $bodyObj->xml,
-            $bodyObj->cnpj,
-            $bodyObj->uf,
-            $bodyObj->type
-        )) {
-            throw new MissingBodyFieldException();
-        }
         $this->xml = $bodyObj->xml;
         $this->cnpj = $bodyObj->cnpj;
         $this->uf = $bodyObj->uf;

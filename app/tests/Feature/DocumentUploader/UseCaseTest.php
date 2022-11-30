@@ -12,6 +12,7 @@ use Core\Modules\DocumentUploader\Requests\Request;
 class UseCaseTest extends TestCase
 {
     public function testSuccess() : void {
+        $this->expectNotToPerformAssertions();
         $body = json_encode(array(
             "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
@@ -25,13 +26,11 @@ class UseCaseTest extends TestCase
         );
 
         $request = new Request($body);
-
-        $response = $useCase->execute($request);
-
-        $this->assertSame('204', $response->getStatusCode());
+        $useCase->execute($request);
     }
 
     public function testFailure() : void {
+        $this->expectException(\Exception::class);
         $body = json_encode(array(
             "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "00000000000000",
@@ -45,9 +44,6 @@ class UseCaseTest extends TestCase
         );
 
         $request = new Request($body);
-
-        $response = $useCase->execute($request);
-
-        $this->assertSame('400', $response->getStatusCode());
+        $useCase->execute($request);
     }
 }

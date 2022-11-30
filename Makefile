@@ -10,7 +10,7 @@ down:
 	docker compose down
 
 run: up
-	docker exec -it bash -c "composer install"
+	docker exec -it laravel bash -c "composer install"
 	docker exec -it laravel php artisan serve --host=0.0.0.0
 
 clean:
