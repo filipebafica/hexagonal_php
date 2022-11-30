@@ -19,11 +19,11 @@ class UFValidationRule
         'MT' => '51', 'GO' => '52', 'DF' => '53'
     );
 
-    public function apply(string $bodyUF, string $accessKey) : void {
-        $bodyUF = $this->ufTable[$bodyUF];
+    public function apply(string $uf, string $accessKey) : void {
+        $uf = $this->ufTable[$uf];
         $accessKeyUF = substr($accessKey, 0, 2);
 
-        if ($bodyUF != $accessKeyUF) {
+        if ($uf != $accessKeyUF) {
             throw new WrongUFException();
         }
     }

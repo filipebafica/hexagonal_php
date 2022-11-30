@@ -7,10 +7,10 @@ use Core\Modules\DocumentUploader\Exceptions\WrongCNPJException;
 
 class CNPJValidationRule
 {
-    public function apply(string $bodyCNPJ, string $accessKey) : void {
+    public function apply(string $cnpj, string $accessKey) : void {
         $accessKeyCNPJ = substr($accessKey, 6, 14);
 
-        if ($bodyCNPJ != $accessKeyCNPJ) {
+        if ($cnpj != $accessKeyCNPJ) {
             throw new WrongCNPJException();
         }
     }
