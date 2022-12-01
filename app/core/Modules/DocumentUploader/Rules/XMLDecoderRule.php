@@ -9,13 +9,17 @@ use Core\Modules\DocumentUploader\Exceptions\XMLDecoderException;
 class XMLDecoderRule
 {
     public function apply(string $xml) : string|bool {
-        $xml = base64_decode(
-            $xml,
-            true
-        );
+        try {
+            $xml = base64_decode(
+                $xml,
+                true
+            );
+            if ($xml == false)
+                throw new XMLDecoderException();
 
-        if ($xml == false)
-            throw new XMLDecoderException();
+        } catch(Throwable $e) {
+                throw new \Exception($e->getMessage(), $e->getCode());
+        }
         return $xml;
     }
 }

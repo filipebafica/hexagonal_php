@@ -20,12 +20,17 @@ class UFValidationRule
     );
 
     public function apply(string $uf, string $accessKey) : void {
-        $uf = $this->ufTable[$uf];
-        $accessKeyUF = substr($accessKey, 0, 2);
+        try {
+            $uf = $this->ufTable[$uf];
+            $accessKeyUF = substr($accessKey, 0, 2);
 
-        if ($uf != $accessKeyUF) {
-            throw new WrongUFException();
+            if ($uf != $accessKeyUF) {
+                throw new WrongUFException();
+            }
+        } catch(Throwable $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
+
     }
 }
 

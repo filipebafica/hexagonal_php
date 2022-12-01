@@ -7,10 +7,10 @@ use Core\Modules\DocumentUploader\Exceptions\MissingFieldException;
 
 class DFe
 {
-    private $xml;
-    private $cnpj;
-    private $uf;
-    private $type;
+    private string $xml;
+    private string $cnpj;
+    private string $uf;
+    private string $type;
 
     public function __construct(string $body) {
         $bodyObj = json_decode($body);

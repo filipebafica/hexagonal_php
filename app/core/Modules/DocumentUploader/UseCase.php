@@ -15,6 +15,7 @@ use Core\Modules\DocumentUploader\Entities\AccessKey;
 use Core\Modules\DocumentUploader\Gateways\DocumentSaveGateway;
 use Core\Modules\DocumentUploader\Gateways\DocumentErrorSaveGateway;
 use Core\Modules\DocumentUploader\Requests\Request;
+use Core\Modules\DocumentUploader\Responses\Response;
 
 final class UseCase
 {
@@ -23,8 +24,6 @@ final class UseCase
     private CNPJValidationRule $cnpjValidationRule;
     private UFValidationRule $ufValidationRule;
     private XMLIngestorDispatchRule $xmlIngestorDispatchRule;
-    private XML $xml;
-    private AccessKey $accessKey;
     private DocumentSaveGateway $documentSaveGateway;
     private DocumentErrorSaveGateway $documentErrorSaveGateway;
 
@@ -44,8 +43,13 @@ final class UseCase
         $this->accessKey = new AccessKey();
     }
 
-    public function execute(Request $request) : void
+    public function execute(Request $request) : Response
     {
+        $documentStatus;
+        $statusCode;
+        $statusMessage;
+        $trace;
+
         try {
             $this->xml->setXML(
                 $this->xmlDecoderRule->apply($request->getDFe()->getXML())
@@ -69,28 +73,36 @@ final class UseCase
                 $this->xml->getXML()
             );
 
-            $this->documentSaveGateway->save(new Document(
-                $request->getDFe(),
-                $this->accessKey->getAccessKey(),
-                "success"
-            ));
+            $documentStatus = "success";
+            $statusCode = 201;
+            $statusMessage = "O documento foi enviado com sucesso para o xmlingestor";
+            $trace = NULL;
 
         } catch (\Exception $e) {
-            $document = new Document(
-                $request->getDFe(),
-                $this->accessKey->getAccessKey(),
-                "error"
-            );
 
-            $this->documentSaveGateway->save($document);
-            $this->documentErrorSaveGateway->save(new DocumentError(
-                $document->getID(),
-                $e->getMessage(),
-                $e->getTraceAsString()
-            ));
-
-            throw new \Exception($e->getMessage(), $e->getCode());
+            $documentStatus = "error";
+            $statusCode = $e->getMessage();
+            $statusMessage = $e->getMessage();
+            $trace = $e->getTraceAsString();
         }
+
+        $document = new Document(
+            $request->getDFe(),
+            $this->accessKey->getAccessKey(),
+            $documentStatus
+        );
+
+        $this->documentSaveGateway->save($document);
+        $this->documentErrorSaveGateway->save(new DocumentError(
+            $document,
+            $statusMessage,
+            $trace
+        ));
+
+        return new Response(
+            $statusCode,
+            $statusMessage
+        );
     }
 }
 ?>
