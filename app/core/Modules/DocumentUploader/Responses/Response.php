@@ -10,7 +10,7 @@ class Response
     private int $statusCode;
     private string $statusMessage;
 
-    public function __construct(string $statusCode, string $statusMessage) {
+    public function __construct(int $statusCode, string $statusMessage) {
         $this->statusCode = $statusCode;
         $this->statusMessage = $statusMessage;
     }

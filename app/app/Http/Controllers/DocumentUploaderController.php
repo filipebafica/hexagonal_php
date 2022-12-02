@@ -7,6 +7,7 @@ use Core\Modules\DocumentUploader\UseCase;
 use Core\Modules\DocumentUploader\Adapters\DocumentSaveAdapter;
 use Core\Modules\DocumentUploader\Adapters\DocumentErrorSaveAdapter;
 use Core\Modules\DocumentUploader\Requests\Request;
+use Core\Modules\DocumentUploader\Responses\Response;
 
 
 class DocumentUploaderController extends Controller
@@ -27,10 +28,10 @@ class DocumentUploaderController extends Controller
                 new DocumentErrorSaveAdapter()
             );
 
-            $useCase->execute($request);
+            $response = $useCase->execute($request);
             return response(
-                "O documento foi enviado com sucesso para o xmlingestor",
-                201
+                $response->getStatusMessage(),
+                $response->getStatusCode()
             );
 
         } catch (\Throwable $e) {

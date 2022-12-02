@@ -8,11 +8,11 @@ use Core\Modules\DocumentUploader\Adapters\DocumentSaveAdapter;
 use Core\Modules\DocumentUploader\Adapters\DocumentErrorSaveAdapter;
 use Core\Modules\DocumentUploader\Entities\Body;
 use Core\Modules\DocumentUploader\Requests\Request;
+use Core\Modules\DocumentUploader\Responses\Response;
 
 class UseCaseTest extends TestCase
 {
     public function testSuccess() : void {
-        $this->expectNotToPerformAssertions();
         $body = json_encode(array(
             "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "91413282000104",
@@ -26,11 +26,11 @@ class UseCaseTest extends TestCase
         );
 
         $request = new Request($body);
-        $useCase->execute($request);
+        $response = $useCase->execute($request);
+        $this->assertSame(201, $response->getStatusCode());
     }
 
     public function testFailure() : void {
-        $this->expectException(\Exception::class);
         $body = json_encode(array(
             "xml" => "MzUyMjExOTE0MTMyODIwMDAxMDQ1NTAwNTAwMDMxODgzODEwNDE0NTEyNjY=",
             "cnpj" => "00000000000000",
@@ -44,6 +44,7 @@ class UseCaseTest extends TestCase
         );
 
         $request = new Request($body);
-        $useCase->execute($request);
+        $response = $useCase->execute($request);
+        $this->assertNotSame(201, $response->getStatusCode());
     }
 }

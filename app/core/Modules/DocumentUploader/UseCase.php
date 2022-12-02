@@ -76,12 +76,12 @@ final class UseCase
             $documentStatus = "success";
             $statusCode = 201;
             $statusMessage = "O documento foi enviado com sucesso para o xmlingestor";
-            $trace = NULL;
+            $trace = "";
 
         } catch (\Exception $e) {
 
             $documentStatus = "error";
-            $statusCode = $e->getMessage();
+            $statusCode = $e->getCode();
             $statusMessage = $e->getMessage();
             $trace = $e->getTraceAsString();
         }
@@ -94,7 +94,7 @@ final class UseCase
 
         $this->documentSaveGateway->save($document);
         $this->documentErrorSaveGateway->save(new DocumentError(
-            $document,
+            $document->getID(),
             $statusMessage,
             $trace
         ));
